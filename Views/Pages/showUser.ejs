@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    <title><%= user.nom %></title>
+</head>
+<body>
+    <%- include('../Partials/navbar') %>
+    <div class="container">
+        <% if (success_msg2) { %>
+            <div class="flash-message success"><%= success_msg2 %></div>
+        <% } %>
+        <p><strong>ID:</strong> <%= user._id %></p>
+        <p><strong><%= user.nom %> <%= user.prenom %></strong></p>
+        <p><strong>Tu es : </strong><%= user.role %></p>
+        <p><strong>Status : </strong><%= user.status %></p>
+        <div class="sub-container">
+            <a href="/deleteuser/<%= user._id %>">Supprimer mon compte</a>
+            <a href="/">Retour à l'Accueil</a>
+        </div>
+    </div>
+    <%- include('../Partials/footer') %>
+</body>
+</html>

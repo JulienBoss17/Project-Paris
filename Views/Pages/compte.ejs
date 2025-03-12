@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    <title>Mon Compte</title>
+</head>
+<body>
+    <style>
+        .container {
+
+            margin-bottom: 14%;
+
+        }
+    </style>
+    <%- include('../Partials/navbar') %>
+    <% if (user) { %>
+        <div class="container">
+            <% if (success_msg) { %>
+                <sectionc lass="flash-message success"><%= success_msg %></section>
+            <% } %>
+            
+            <% if (error_msg2) {%>
+                <section class="flash-message error"><%= error_msg2%></section>
+            <% } %>  
+            <a href="/showuser/<%= user._id  %>">Profil</a>
+            <form action="/logout" method="POST">
+                <button type="submit">Déconnexion</button>
+            </form>
+
+            <% if(user.role === "admin") {%>
+                <div>
+                    <h4>Ajouter une annonce :</h4>
+                    <form action="/annonces/<%= user._id %>" method="POST" >
+            
+                        <label for="titre">Titre de l'annonce</label><br>
+                        <input type="text" id="titre" name="titre" required>
+                        <br><br>
+                    
+                        <label for="description">Description</label><br>
+                        <textarea id="description" name="description" rows="4" cols="50" required></textarea>
+                        <br><br>
+                    
+                        <input type="submit" value="Publier l'annonce">
+                    </form>
+                    <% if (success_msg) { %>
+                        <section class="flash-message success"><%= success_msg %></section>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+    <% } else { %>
+        <div class="container">
+            <h1>S'enregistrer</h1>
+            <form action="/register" method="POST">
+
+                <label for="nom">Nom</label>
+                <input type="text" id="nom" name="nom" required>
+
+                <label for="first">Prénom</label>
+                <input type="text" id="prenom" name="prenom" required>
+
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit">S'enregistrer</button>
+            </form>
+            <% if (success_msg) { %>
+                <section class="flash-message success"><%= success_msg %></section>
+            <% } %>
+        
+            <% if (error_msg) { %>
+                <section class="flash-message error"><%= error_msg %></section>
+            <% } %>  
+        </div>
+        <div class="container">
+            <h1>Login</h1>
+            <form action="/login" method="POST">
+                <label for="nom">Nom</label>
+                <input type="text" id="nom" name="nom" required>
+    
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" required>
+    
+                <button type="submit">Se connecter</button>
+            </form>
+        </div>
+        <% if (error_msg2) { %>
+            <section class="flash-message error"><%= error_msg2 %></section>
+        <% } %> 
+    <% } %>
+    <%- include('../Partials/footer') %>
+</body>
+</html>

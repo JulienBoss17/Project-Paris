@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter un prono</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <%- include('../Partials/navbar') %>
+    <h1>Ajouter un pronostic</h1>
+    <form action="/ajouter" method="POST">
+        <label>Match :</label>
+        <input type="text" name="match" required>
+        
+        <label>Date :</label>
+        <input type="date" name="date" value="<%= new Date().toISOString().split('T')[0] %>" required>
+        
+        <label>Prédiction :</label>
+        <input type="text" name="prediction" required>
+
+        <button type="submit">Ajouter</button>
+    </form>
+    <%- include('../Partials/footer') %>
+</body>
+</html>
