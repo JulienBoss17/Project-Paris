@@ -4,22 +4,137 @@
     <meta charset="UTF-8">
     <title>Ajouter un prono</title>
     <link rel="stylesheet" href="../style.css">
-</head>
-<body>
-    <%- include('../Partials/navbar') %>
-    <h1>Ajouter un pronostic</h1>
-    <form action="/ajouter" method="POST">
-        <label>Match :</label>
-        <input type="text" name="match" required>
-        
-        <label>Date :</label>
-        <input type="date" name="date" value="<%= new Date().toISOString().split('T')[0] %>" required>
-        
-        <label>Prédiction :</label>
-        <input type="text" name="prediction" required>
+    <script>
+        function ajouterMatch() {
+            let container = document.getElementById("matchsContainer");
+            let matchDiv = document.createElement("div");
+            matchDiv.classList.add("match-group", "mb-3");
+            matchDiv.innerHTML = `
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" name="equipeDomicile" placeholder="Équipe domicile" required>
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" name="equipeExterieur" placeholder="Équipe extérieur" required>
+                    </div>
+                    <div class="col">
+                        <input type="date" class="form-control" name="date" value="<%= new Date().toISOString().split('T')[0] %>"" required>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col">
+                        <select class="form-control" name="typePrediction" required>
+                            <option value="Score Exact">Score Exact</option>
+                            <option value="Buteur">Buteur</option>
+                            <option value="1X2">1X2 (Victoire/Nul/Défaite)</option>
+                            <option value="Handicap">Handicap</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" name="prediction" placeholder="Prédiction" required>
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" name="cote" step="0.01" placeholder="Cote" required>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-danger" onclick="supprimerMatch(this)">❌</button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(matchDiv);
+        }
 
-        <button type="submit">Ajouter</button>
+        function supprimerMatch(button) {
+            button.parentElement.parentElement.parentElement.remove();
+        }
+    </script>
+</head>
+<body class="container mt-5">
+    <%- include('../Partials/navbar') %>
+    <h1 class="mb-4">Ajouter un Pronostic</h1>
+    <form action="/ajouter" method="POST">
+        <label>Type de Pari :</label>
+        <select name="typePari">
+            <option value="Simple">Simple</option>
+            <option value="Combiné">Combiné</option>
+            <option value="Buteur">Buteur</option>
+            <option value="Score Exact">Score Exact</option>
+            <option value="Handicap">Handicap</option>
+        </select>
+    
+        <label>Date du pari :</label>
+        <input type="date" name="date" value="<%= new Date().toISOString().split('T')[0] %>" required>
+    
+        <div id="matchs">
+            <div class="match">
+                <label>Équipe Domicile :</label>
+                <input type="text" name="matchs[0][equipeDomicile]" required>
+                
+                <label>Équipe Extérieure :</label>
+                <input type="text" name="matchs[0][equipeExterieur]" required>
+    
+                <label>Date du match :</label>
+                <input type="date" name="matchs[0][date]" value="<%= new Date().toISOString().split('T')[0] %>" required>
+    
+                <label>Type de Prédiction :</label>
+                <select name="matchs[0][typePrediction]">
+                    <option value="Score Exact">Score Exact</option>
+                    <option value="Buteur">Buteur</option>
+                    <option value="1X2">1X2</option>
+                    <option value="Handicap">Handicap</option>
+                </select>
+    
+                <label>Prédiction :</label>
+                <input type="text" name="matchs[0][prediction]" required>
+    
+                <label>Cote :</label>
+                <input type="number" name="matchs[0][cote]" step="0.01" required>
+            </div>
+        </div>
+    
+        <button type="button" onclick="ajouterMatch()">Ajouter un match</button>
+    
+        <label>Cote finale (pour combiné) :</label>
+        <input type="number" name="cote" step="0.01" required>
+    
+        <button type="submit">Ajouter le prono</button>
     </form>
+    
+    <script>
+        let index = 1;
+        function ajouterMatch() {
+            const container = document.getElementById("matchs");
+            const div = document.createElement("div");
+            div.classList.add("match");
+            div.innerHTML = `
+                <label>Équipe Domicile :</label>
+                <input type="text" name="matchs[${index}][equipeDomicile]" required>
+                
+                <label>Équipe Extérieure :</label>
+                <input type="text" name="matchs[${index}][equipeExterieur]" required>
+    
+                <label>Date du match :</label>
+                <input type="date" name="matchs[${index}][date]"  value="<%= new Date().toISOString().split('T')[0] %>" required>
+    
+                <label>Type de Prédiction :</label>
+                <select name="matchs[${index}][typePrediction]">
+                    <option value="Score Exact">Score Exact</option>
+                    <option value="Buteur">Buteur</option>
+                    <option value="1X2">1X2</option>
+                    <option value="Handicap">Handicap</option>
+                </select>
+    
+                <label>Prédiction :</label>
+                <input type="text" name="matchs[${index}][prediction]" required>
+    
+                <label>Cote :</label>
+                <input type="number" name="matchs[${index}][cote]" step="0.01" required>
+            `;
+            container.appendChild(div);
+            index++;
+        }
+    </script>
+    
     <%- include('../Partials/footer') %>
 </body>
 </html>

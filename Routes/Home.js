@@ -17,12 +17,12 @@ router.get("/", async (req, res) => {
 
 
     // Séparer les pronostics "en attente" et ceux qui sont "gagné" ou "perdu"
-    let enAttente = pronostics.filter(prono => prono.statut === "en attente");
-    let termines = pronostics.filter(prono => prono.statut !== "en attente");
+    let enAttente = pronostics.filter(prono => prono.statut === "En Attente");
+    let termines = pronostics.filter(prono => prono.statut !== "En Attente");
 
     const totalPronostics = pronostics.length - enAttente.length;
-    const pronosticsGagnes = pronostics.filter(prono => prono.statut === 'gagné').length;
-    const pronosticsPerdus = pronostics.filter(prono => prono.statut === 'perdu').length;
+    const pronosticsGagnes = pronostics.filter(prono => prono.statut === 'Gagné').length;
+    const pronosticsPerdus = pronostics.filter(prono => prono.statut === 'Perdu').length;
 
     const ratio = totalPronostics > 0 ? (pronosticsGagnes / totalPronostics) * 100 : 0;
 
@@ -72,10 +72,33 @@ router.get("/ajouter", verifySession("admin"),(req, res) => {
 });
 
 router.post("/ajouter", verifySession("admin"),async (req, res) => {
-    const { match, date, prediction } = req.body;
-    await new Prono({ match, date, prediction }).save();
-    res.redirect("/");
+    console.log("Données reçues:", JSON.stringify(req.body, null, 2)); // 🔍 Voir ce qui est reçu
+
+    try {
+        let matchs = Array.isArray(req.body.matchs) ? req.body.matchs : [req.body.matchs];
+
+        const nouveauProno = new Prono({
+            matchs: matchs.map(match => ({
+                equipeDomicile: match.equipeDomicile,
+                equipeExterieur: match.equipeExterieur,
+                date: new Date(match.date), // Convertir en Date
+                typePrediction: match.typePrediction,
+                prediction: match.prediction,
+                cote: parseFloat(match.cote) // Convertir en Number
+            })),
+            date: new Date(req.body.date), // Convertir en Date
+            typePari: req.body.typePari,
+            cote: parseFloat(req.body.cote), // Convertir en Number
+        });
+
+        await nouveauProno.save();
+        res.redirect("/");
+    } catch (error) {
+        console.error("Erreur Mongoose :", error);
+        res.status(400).send("Erreur lors de l'ajout du prono.");
+    }
 });
+
 
 // ✅ Marquer un prono comme gagné/perdu
 router.post("/:id/statut", verifySession("admin"),async (req, res) => {
@@ -112,8 +135,6 @@ router.delete("/:pronoId/commentaire/:commentaireId", verifySession("admin"),asy
         prono.commentaires.pull(commentaireId);  
 
         await prono.save();  
-
-        console.log("Commentaire supprimé avec succès");
 
         res.redirect("/");
     } catch (error) {

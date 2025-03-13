@@ -23,12 +23,11 @@
             
             <% if (error_msg2) {%>
                 <section class="flash-message error"><%= error_msg2%></section>
-            <% } %>  
-            <a href="/showuser/<%= user._id  %>">Profil</a>
-            <form action="/logout" method="POST">
-                <button type="submit">Déconnexion</button>
-            </form>
-
+            <% } %>
+            <% if(user.role === "admin") {%>
+                <a href="/ajouter">➕ Ajouter un prono</a>
+            <% } %>
+            <a href="/showuser/<%= user._id  %>">Profil</a>  
             <% if(user.role === "admin") {%>
                 <div>
                     <h4>Ajouter une annonce :</h4>
@@ -48,6 +47,9 @@
                         <section class="flash-message success"><%= success_msg %></section>
                     <% } %>
                 </div>
+                <form action="/logout" method="POST">
+                    <button type="submit">Déconnexion</button>
+                </form>
             <% } %>
         </div>
     <% } else { %>
