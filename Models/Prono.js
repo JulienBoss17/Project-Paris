@@ -22,7 +22,7 @@ const MatchSchema = new mongoose.Schema({
 const PronoSchema = new mongoose.Schema({
     matchs: { type: [MatchSchema], required: true }, 
     date: { type: Date, required: true },
-    typePari: { type: String, enum: ["Simple", "Combiné", "Buteur", "Score Exact", "Handicap"], required: true },
+    typePari: { type: String, enum: ["Simple", "Combiné"], required: true },
     createdAt: { type: Date, default: Date.now },
     commentaires: [CommentaireSchema],  
     cote: { type: Number, required: true, min: 1, default: 1 },  // 👈 Valeur par défaut si absent

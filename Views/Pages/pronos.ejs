@@ -9,7 +9,6 @@
     <%- include('../Partials/navbar') %>
 
     <div>
-        <h3>Dernière annonce</h3>
         <p class="mid">Les pronostics sont mis à jour régulièrement. N'hésitez pas à revenir pour voir les dernières mises à jour.</p>
         <% if(annonces) { %>
             <% annonces.forEach(annonce => { %>
@@ -18,6 +17,7 @@
                             <h3><%= annonce.titre %></h3>
                             <p class="mid"><%= annonce.description %></p>
                             <p><strong>Le :</strong> <%= new Date(annonce.dateAnnonce).toLocaleDateString("fr-FR") %> à <%= new Date(annonce.dateAnnonce).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %></p>
+                            <p>Par <%= annonce.userId.prenom %> <%= annonce.userId.nom%> </p>
                     </div>    
                 <% }) %>
         <% } %>
@@ -49,12 +49,11 @@
                             <strong><%= prono.cote %></strong> <!-- Cote finale du combiné ou pari simple -->
                         <% } else {%>
                                 <% prono.matchs.forEach(match => { %>
-                                    <strong>Cote :</strong> <%= match.cote %>
+                                    <strong></strong> <%= match.cote %>
                                 <% }); %>
                         <% } %>
                         du <%= new Date(prono.createdAt).toLocaleDateString("fr-FR") %> à <%= new Date(prono.createdAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %>
-                    </strong>
-                    <strong>Ajouté le :</strong> <%= new Date(prono.createdAt).toLocaleDateString("fr-FR") %> à <%= new Date(prono.createdAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %>
+                    </strong> %>
                     <strong>Statut :</strong> <%= prono.statut %>
                 </li>
 
@@ -62,7 +61,7 @@
                     <tr>
                         <td colspan="5">
                             <% prono.matchs.forEach(match => { %>
-                                <strong><%= match.equipeDomicile %> vs <%= match.equipeExterieur %></strong> - le
+                                <strong><%= match.equipeDomicile %> vs <%= match.equipeExterieur %></strong> - 
                                 <%= new Date(match.date).toLocaleDateString() %> - 
                                 <strong><%= match.typePrediction %> :</strong> <%= match.prediction %> - 
                                 <strong>Cote :</strong> <%= match.cote %>
@@ -75,7 +74,7 @@
                 <li>
 
                     <% if (user?.role === "admin") { %>
-                        <form action="/<%= prono._id %>/statut" method="POST">
+                        <form action="/<%= prono._id %>/statut" method="POST" >
                             <select name="statut">
                                 <option value="En Attente" <%= prono.statut === "En Attente" ? "selected" : "" %>>En attente</option>
                                 <option value="Gagné" <%= prono.statut === "Gagné" ? "selected" : "" %>>Gagné</option>
@@ -109,7 +108,6 @@
                         <% } %>
                         du <%= new Date(prono.createdAt).toLocaleDateString("fr-FR") %> à <%= new Date(prono.createdAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %>
                     </strong>
-                    <strong>Ajouté le :</strong> <%= new Date(prono.createdAt).toLocaleDateString("fr-FR") %> à <%= new Date(prono.createdAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %>
                     <strong>Statut :</strong> <%= prono.statut %>
                 </li>
 
@@ -176,8 +174,22 @@
         <% }); %>
     </ul>
 </div>
-
-    
     <%- include('../Partials/footer') %>
+    <script>
+        // Sauvegarde la position du scroll avant l'envoi du formulaire
+        document.addEventListener("DOMContentLoaded", function () {
+            if (sessionStorage.getItem("scrollPosition")) {
+                window.scrollTo(0, sessionStorage.getItem("scrollPosition"));
+                sessionStorage.removeItem("scrollPosition");
+            }
+    
+            document.querySelectorAll("form").forEach(form => {
+                form.addEventListener("submit", function () {
+                    sessionStorage.setItem("scrollPosition", window.scrollY);
+                });
+            });
+        });
+    </script>
+    
 </body>
 </html>

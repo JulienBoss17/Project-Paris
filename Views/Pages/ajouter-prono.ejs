@@ -4,50 +4,6 @@
     <meta charset="UTF-8">
     <title>Ajouter un prono</title>
     <link rel="stylesheet" href="../style.css">
-    <script>
-        function ajouterMatch() {
-            let container = document.getElementById("matchsContainer");
-            let matchDiv = document.createElement("div");
-            matchDiv.classList.add("match-group", "mb-3");
-            matchDiv.innerHTML = `
-                <div class="row">
-                    <div class="col">
-                        <input type="text" class="form-control" name="equipeDomicile" placeholder="Équipe domicile" required>
-                    </div>
-                    <div class="col">
-                        <input type="text" class="form-control" name="equipeExterieur" placeholder="Équipe extérieur" required>
-                    </div>
-                    <div class="col">
-                        <input type="date" class="form-control" name="date" value="<%= new Date().toISOString().split('T')[0] %>"" required>
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col">
-                        <select class="form-control" name="typePrediction" required>
-                            <option value="Score Exact">Score Exact</option>
-                            <option value="Buteur">Buteur</option>
-                            <option value="1X2">1X2 (Victoire/Nul/Défaite)</option>
-                            <option value="Handicap">Handicap</option>
-                        </select>
-                    </div>
-                    <div class="col">
-                        <input type="text" class="form-control" name="prediction" placeholder="Prédiction" required>
-                    </div>
-                    <div class="col">
-                        <input type="number" class="form-control" name="cote" step="0.01" placeholder="Cote" required>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn btn-danger" onclick="supprimerMatch(this)">❌</button>
-                    </div>
-                </div>
-            `;
-            container.appendChild(matchDiv);
-        }
-
-        function supprimerMatch(button) {
-            button.parentElement.parentElement.parentElement.remove();
-        }
-    </script>
 </head>
 <body class="container mt-5">
     <%- include('../Partials/navbar') %>
@@ -57,9 +13,6 @@
         <select name="typePari">
             <option value="Simple">Simple</option>
             <option value="Combiné">Combiné</option>
-            <option value="Buteur">Buteur</option>
-            <option value="Score Exact">Score Exact</option>
-            <option value="Handicap">Handicap</option>
         </select>
     
         <label>Date du pari :</label>
