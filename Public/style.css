@@ -74,9 +74,10 @@ button {
     background-color: #007BFF;
     color: #fff;
     border: none;
-    padding: 0.2rem 1rem;
+    padding: 0.2rem 0.5rem;
     cursor: pointer;
     border-radius: 3px;
+    margin-left: 10px;
 }
 
 button:hover {
@@ -84,9 +85,9 @@ button:hover {
 }
 
 /* Formulaire */
-form {
+/* form {
     margin-top: 1rem;
-}
+} */
 
 textarea {
     width: 100%;
@@ -107,18 +108,22 @@ textarea {
     padding: 1rem;
 }
 
-.commentaire p {
-    padding: 1rem;
-    margin: 0;
+.commentaire em {
+    font-size: 1.2rem;
+    color: #777;
 }
 
-.commentaire em {
-    font-size: 1.1rem;
-    color: #777;
+.commentaire strong {
+    display: flex;
 }
 
 h4 {
     margin-top: 2rem;
 }
 
-
+.little {
+    font-size: 0.8rem;
+    color: #777;
+    margin: 0;
+    padding: 0;
+}
