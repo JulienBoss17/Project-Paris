@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const ejs = require("ejs")
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const session = require('express-session');
 const flash = require('connect-flash');
 const methodOverride = require("method-override");

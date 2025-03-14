@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Prono = require("../Models/Prono");
 const User = require("../Models/Users");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const Annonce = require("../Models/Annonces");
 
 const verifySession = require("../Middlewares/verifysession");
