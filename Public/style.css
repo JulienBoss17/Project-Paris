@@ -68,6 +68,21 @@ footer {
     padding: 25px;
     border: black solid 2px;
     background-color: rgba(255, 255, 255, 0.18);
+    padding: 25px;
+    border: black solid 2px;
+    background-color: rgba(255, 255, 255, 0.18);
+    overflow:auto/* Empêche tout dépassement visuel */
+    ;
+    overflow-y: scroll; /* Permet le défilement vertical */
+    scrollbar-width: none; /* Cache la barre de défilement dans Firefox */
+    -ms-overflow-style: none; /* Cache la barre de défilement dans IE et Edge */
+    cursor: grab; /* Change le curseur pour indiquer un défilement */
+}
+
+.mid ul li {
+    list-style: none; /* Supprime les puces de la liste */
+    margin-bottom: 15px; /* Espacement entre les commentaires */
+    
 }
 
 .commentaire {
@@ -101,6 +116,16 @@ textarea {
     border: 1px solid #9b9b9b;
     resize: none;
 }
+
+.flex-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.flex-container p {
+    margin-right: 10px;
+}
+
 
 button {
     padding: 10px 20px;

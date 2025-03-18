@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+    <style>
+        h1 {
+            margin-bottom: 10px;
+        }
+    </style>
     <%- include('../Partials/navbar') %>
 
     <div class="mid annonce">
@@ -156,15 +161,25 @@
                 <% } else { %>
                     <div class="commentaire">
                         <% prono.commentaires.forEach(commentaire => { %>
-                            <div class="commentaire-item">
-                                <p class="little"><em><%= commentaire.auteur %></em> : <strong><%= commentaire.contenu %></strong> <em><%= new Date(commentaire.date).toLocaleDateString("fr-FR") %> à <%= new Date(commentaire.date).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %></em></p>
-                                
-                                <% if (user?.role === "admin") { %>
-                                    <form action="/<%= prono._id %>/commentaire/<%= commentaire._id %>?_method=DELETE" id="commentaire-form" method="POST">
-                                        <button type="submit">Supprimer</button>
-                                    </form>
-                                <% } %>
+                    <div class="commentaire-item">
+                        <% if (user?.role === "user") { %>
+                            <p class="little">
+                                <em><%= commentaire.auteur %></em> : <strong><%= commentaire.contenu %></strong> 
+                                <em><%= new Date(commentaire.date).toLocaleDateString("fr-FR") %> à <%= new Date(commentaire.date).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %></em>
+                            </p>
+                        <% } else if (user?.role === "admin") { %>
+                            <div class="flex-container">
+                                <p class="little">
+                                    <em><%= commentaire.auteur %></em> : <strong><%= commentaire.contenu %></strong> 
+                                    <em><%= new Date(commentaire.date).toLocaleDateString("fr-FR") %> à <%= new Date(commentaire.date).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %></em>
+                                </p>
+                                <form action="/<%= prono._id %>/commentaire/<%= commentaire._id %>?_method=DELETE" id="commentaire-form" method="POST">
+                                    <button type="submit">Supprimer</button>
+                                </form>
                             </div>
+                        <% } %>
+                    </div>
+
                         <% }); %>
                     </div>
                 <% } %>
