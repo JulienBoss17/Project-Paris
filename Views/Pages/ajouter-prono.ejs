@@ -6,6 +6,98 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="container mt-5">
+    <style>
+
+        h1 {
+            text-align: center;
+            padding: 25px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-bottom: 35px;
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            box-shadow: 0 7px 13px rgb(255, 255, 255);
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .match {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: #f1f1f1;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                padding-top: 50px;
+            }
+
+            form {
+                padding: 15px;
+                box-shadow: none;
+            }
+
+            input, select, button {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .match {
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            form {
+                padding: 10px;
+            }
+
+            input, select, button {
+                font-size: 10px;
+                padding: 6px;
+            }
+
+            .match {
+                padding: 6px;
+            }
+        }
+    </style>
     <%- include('../Partials/navbar') %>
     <h1 class="mb-4">Ajouter un Pronostic</h1>
     <form action="/ajouter" method="POST">
@@ -87,7 +179,5 @@
             index++;
         }
     </script>
-    
-    <%- include('../Partials/footer') %>
 </body>
 </html>

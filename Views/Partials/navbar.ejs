@@ -1,40 +1,12 @@
-<style>
-    nav {
-        background-color: #333;
-        color: white;
-        text-align: center;
-        padding: 0.2rem;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    nav ul {
-        list-style-type: none;
-        display: flex;
-        align-items: center ;
-    }
-
-    nav ul li, h2 {
-        margin: 0 1rem;
-    }
-
-    nav ul li a {
-        color: white;
-        text-decoration: none;
-    }
-</style>
-
 <nav>
     <ul>
-        <h2>Julien's Pronostics</h2>
-    </ul>
-    <ul>
-        <li><a href="/">Accueil</a></li>
+        <li>
+            <a href="/">Accueil</a>
         <% if(user) { %>
-            <li><a href="/compte">Mon Compte</a></li>
+            <a href="/compte">Mon Compte</a>
         <% } else { %>
-            <li><a href="/compte">S'Authentifier</a></li>
+            <a href="/compte">S'authentifier</a>
         <% } %>
+    </li>
     </ul>
-    
 </nav>

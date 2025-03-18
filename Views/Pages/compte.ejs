@@ -8,10 +8,90 @@
 </head>
 <body>
     <style>
+        .container p, strong, h4{
+            color: rgb(0, 0, 0);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
         .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 15px 20px rgb(255, 255, 255);
+        }
 
-            margin-bottom: 14%;
+        form {
+            display: flex;
+            flex-direction: column;
+        }
 
+        form label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        form input, form textarea, form button {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .a a {
+            font-size: 1.3rem;
+            color: rgb(94, 94, 94);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 25px;
+            text-decoration: underline;
+        }
+
+        .a a:hover {
+            color: rgb(0, 0, 0);
+            transition: color 0.3s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+
+            body{
+                padding-top: 50px;
+            }
+            .container {
+                padding: 10px;
+                margin: 10px;
+            }
+
+            form input, form textarea, form button {
+                font-size: 1rem;
+                padding: 8px;
+            }
+
+            .a a {
+                font-size: 1rem;
+                margin: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 5px;
+                margin: 5px;
+            }
+
+            form input, form textarea, form button {
+                font-size: 0.9rem;
+                padding: 6px;
+            }
+
+            .a a {
+                font-size: 0.9rem;
+                margin: 10px;
+            }
         }
     </style>
     <%- include('../Partials/navbar') %>
@@ -24,13 +104,16 @@
             <% if (error_msg2) {%>
                 <section class="flash-message error"><%= error_msg2%></section>
             <% } %>
+            <div class="a">
+                <% if(user.role === "admin") {%>
+                    <a href="/ajouter">Ajouter un pronostic</a>
+                <% } %>
+                <a href="/showuser/<%= user._id  %>">Profil</a>  
+            </div>
             <% if(user.role === "admin") {%>
-                <a href="/ajouter">➕ Ajouter un prono</a>
-            <% } %>
-            <a href="/showuser/<%= user._id  %>">Profil</a>  
-            <% if(user.role === "admin") {%>
-                <div>
-                    <h4>Ajouter une annonce :</h4>
+                <br>
+                <h4>Ajouter une annonce :</h4>
+                <div class="annonce">
                     <form action="/annonces/<%= user._id %>" method="POST" >
             
                         <label for="titre">Titre de l'annonce</label><br>
@@ -47,11 +130,14 @@
                         <section class="flash-message success"><%= success_msg %></section>
                     <% } %>
                 </div>
-                <form action="/logout" method="POST">
-                    <button type="submit">Déconnexion</button>
-                </form>
             <% } %>
+            <br>
+            <br>
+            <form action="/logout" method="POST">
+                <button type="submit">Déconnexion</button>
+            </form>
         </div>
+
     <% } else { %>
         <div class="container">
             <h1>S'enregistrer</h1>
@@ -92,6 +178,5 @@
             <section class="flash-message error"><%= error_msg2 %></section>
         <% } %> 
     <% } %>
-    <%- include('../Partials/footer') %>
 </body>
 </html>
