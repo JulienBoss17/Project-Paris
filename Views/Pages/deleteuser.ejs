@@ -76,11 +76,11 @@
         <h1>Supprimmer son compte</h1>
         <p>Voulez vous vraiment supprimer votre compte?</p>
         <p><strong>Nom du compte :</strong> <%= user.nom %></p>
-        <form action="/deleteuser/<%= user._id %>?_method=DELETE" method="POST">
-            <button type="submit">Oui, Supprimer</button>
-        </form>
-        <a href="/compte">Revenir en arrière</a>
+        <form action="/deleteuser/<%= user._id%>?_method=DELETE" method="POST">
+            <button type="submit">Test Supprimer</button>
+        </form>   
     </div>
+    <a href="/compte">Revenir en arrière</a>
     <%- include('../Partials/footer') %>
 </body>
 </html>
