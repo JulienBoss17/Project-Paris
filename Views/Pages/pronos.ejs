@@ -22,13 +22,11 @@
                             <h3><%= annonce.titre %></h3>
                             <p><%= annonce.description %></p>
                             <br>
-                            <p>Le : <strong>
-                                <%= new Date(annonce.dateAnnonce).toLocaleString("fr-FR", { 
-                                  timeZone: "Europe/Paris", 
-                                  hour: "2-digit", 
-                                  minute: "2-digit" 
-                                }) %>
-                              </strong></p>
+                            <p>Le : <%= new Date(annonce.dateAnnonce).toLocaleString("fr-FR", { 
+                                timeZone: "Europe/Paris", 
+                                hour: "2-digit", 
+                                minute: "2-digit" 
+                              }) %> à <%= new Date(annonce.dateAnnonce).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %></strong></p>
                             <p>Par <strong><%= annonce.userId.prenom %> <%= annonce.userId.nom%></strong></p>
                     </div>    
                 <% }) %>
