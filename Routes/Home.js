@@ -106,7 +106,7 @@ router.post("/:id/statut", verifySession("admin"),async (req, res) => {
     res.redirect("/");
 });
 
-router.post("/:id/commentaire", isAuthenticated,async (req, res) => {
+router.post("/:id/commentaire", isAuthenticated(),async (req, res) => {
     const { auteur, contenu } = req.body;
 
     const prono = await Prono.findById(req.params.id);
