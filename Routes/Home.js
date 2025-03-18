@@ -7,7 +7,6 @@ const Annonce = require("../Models/Annonces");
 
 const verifySession = require("../Middlewares/verifysession");
 const isAuthenticated = require("../Middlewares/verifysession2");
-const isAuthenticatedd = require("../Middlewares/verifysession3")
 
 // 📝 Afficher tous les pronos
 router.get("/", async (req, res) => {
@@ -244,7 +243,7 @@ router.get("/showuser/:id", isAuthenticated(),async (req, res) => {
 router.get("/deleteuser/:id", async (req, res) => {
     res.render("deleteuser");
 });
-router.delete("/deleteuser/:id", isAuthenticatedd(),async (req, res) => {
+router.delete("/deleteuser/:id",async (req, res) => {
     const userId = req.params.id;
     try {
         const user = await User.findByIdAndDelete(userId);
