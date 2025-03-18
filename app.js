@@ -23,7 +23,7 @@ app.use(session({
       mongoUrl: process.env.MONGO_URI,
     }),
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24, // 1 jour
+      maxAge: 1000 * 60 * 60 * 1, // 1 heure
     }
   }));
 app.use(flash());
