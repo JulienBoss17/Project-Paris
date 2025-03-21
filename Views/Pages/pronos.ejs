@@ -168,7 +168,7 @@
                     <div class="commentaire">
                         <% prono.commentaires.forEach(commentaire => { %>
                     <div class="commentaire-item">
-                        <% if (user?.role === "user") { %>
+                        <% if (user?.role !== "admin") { %>
                             <p class="little">
                                 <em><%= commentaire.auteur %></em> : <strong><%= commentaire.contenu %></strong> 
                                 <em><%= new Date(commentaire.date).toLocaleDateString("fr-FR") %> à <%= new Date(commentaire.date).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %></em>
