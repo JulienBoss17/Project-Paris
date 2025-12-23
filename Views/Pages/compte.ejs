@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,177 +7,73 @@
     <title>Mon Compte</title>
 </head>
 <body>
-    <style>
-        .container p, strong, h4{
-            color: rgb(0, 0, 0);
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .flash-message {
-            text-align: center;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 15px 20px rgb(255, 255, 255);
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        form label {
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        form input, form textarea, form button {
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .a a {
-            font-size: 1.3rem;
-            color: rgb(94, 94, 94);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin: 25px;
-            text-decoration: underline;
-        }
-
-        .a a:hover {
-            color: rgb(0, 0, 0);
-            transition: color 0.3s ease-in-out;
-        }
-
-        @media (max-width: 768px) {
-
-            body{
-                padding-top: 50px;
-            }
-            .container {
-                padding: 10px;
-                margin: 10px;
-            }
-
-            form input, form textarea, form button {
-                font-size: 1rem;
-                padding: 8px;
-            }
-
-            .a a {
-                font-size: 1rem;
-                margin: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 5px;
-                margin: 5px;
-            }
-
-            form input, form textarea, form button {
-                font-size: 0.9rem;
-                padding: 6px;
-            }
-
-            .a a {
-                font-size: 0.9rem;
-                margin: 10px;
-            }
-        }
-    </style>
     <%- include('../Partials/navbar') %>
-    <% if (user) { %>
-        <div class="container">
-            <% if (success_msg) { %>
-                <sectionc class="flash-message success"><%= success_msg %></section>
-            <% } %>
-            
-            <% if (error_msg2) {%>
-                <section class="flash-message error"><%= error_msg2%></section>
-            <% } %>
-            <div class="a">
-                <% if(user.role === "admin") {%>
-                    <a href="/ajouter">Ajouter un pronostic</a>
-                <% } %>
-                <a href="/showuser/<%= user._id  %>">Profil</a>  
+
+    <div class="container">
+        <% if (success_msg) { %> <div class="flash-message success"><%= success_msg %></div> <% } %>
+        <% if (error_msg || locals.error_msg2) { %> <div class="flash-message error"><%= error_msg || error_msg2 %></div> <% } %>
+
+        <% if (user) { %>
+            <div class="text-center">
+                <h1>Bonjour, <%= user.prenom %> ! 👋</h1>
+                <p class="text-muted">Ravi de vous revoir sur votre espace.</p>
             </div>
-            <% if(user.role === "admin") {%>
-                <br>
-                <h4>Ajouter une annonce :</h4>
+
+            <div class="stats" style="margin: 2rem 0;">
+                <% if(user.role === "admin") { %>
+                    <a href="/ajouter" class="btn">➕ Ajouter un prono</a>
+                <% } %>
+                <a href="/showuser/<%= user._id %>" class="btn" >⚙️ Voir mon Profil</a>
+            </div>
+
+            <% if(user.role === "admin") { %>
                 <div class="annonce">
-                    <form action="/annonces/<%= user._id %>" method="POST" >
-            
-                        <label for="titre">Titre de l'annonce</label><br>
-                        <input type="text" id="titre" name="titre" required>
-                        <br><br>
-                    
-                        <label for="description">Description</label><br>
-                        <textarea id="description" name="description" rows="4" cols="50" required></textarea>
-                        <br><br>
-                    
-                        <input type="submit" value="Publier l'annonce">
+                    <h3>📢 Publier une annonce</h3>
+                    <form action="/annonces/<%= user._id %>" method="POST">
+                        <label for="titre">Titre</label>
+                        <input type="text" id="titre" name="titre" placeholder="Titre accrocheur..." required>
+                        
+                        <label for="description">Message</label>
+                        <textarea id="description" name="description" rows="3" placeholder="Contenu de l'annonce..." required></textarea>
+                        
+                        <button type="submit" class="btn" style="width: 100%;">Publier maintenant</button>
                     </form>
-                    <% if (success_msg) { %>
-                        <section class="flash-message success"><%= success_msg %></section>
-                    <% } %>
                 </div>
             <% } %>
-            <br>
-            <br>
-            <form action="/logout" method="POST">
-                <button type="submit">Déconnexion</button>
+
+            <form action="/logout" method="POST" style="margin-top: 2rem;">
+                <button type="submit" style="background: #fee2e2; color: #991b1b; width: 100%;">Se déconnecter</button>
             </form>
-        </div>
 
-    <% } else { %>
-        <div class="container">
-            <h1>S'enregistrer</h1>
-            <form action="/register" method="POST">
+        <% } else { %>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
+                
+                <div class="div" style="margin: 0; box-shadow: var(--shadow-sm);">
+                    <h2 class="text-center">Connexion</h2>
+                    <form action="/login" method="POST">
+                        <label for="login_nom">Nom d'utilisateur</label>
+                        <input type="text" id="login_nom" name="nom" required>
+                        <label for="login_pass">Mot de passe</label>
+                        <input type="password" id="login_pass" name="password" required>
+                        <button type="submit" style="width: 100%;">Se connecter</button>
+                    </form>
+                </div>
 
-                <label for="nom">Nom</label>
-                <input type="text" id="nom" name="nom" required>
+                <div class="div" style="margin: 0; box-shadow: var(--shadow-sm);">
+                    <h2 class="text-center">Créer un compte</h2>
+                    <form action="/register" method="POST">
+                        <label for="reg_nom">Nom</label>
+                        <input type="text" id="reg_nom" name="nom" required>
+                        <label for="reg_pre">Prénom</label>
+                        <input type="text" id="reg_pre" name="prenom" required>
+                        <label for="reg_pass">Mot de passe</label>
+                        <input type="password" id="reg_pass" name="password" required>
+                        <button type="submit" style="width: 100%; background: var(--secondary);">S'enregistrer</button>
+                    </form>
+                </div>
 
-                <label for="first">Prénom</label>
-                <input type="text" id="prenom" name="prenom" required>
-
-                <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" required>
-
-                <button type="submit">S'enregistrer</button>
-            </form>
-            <% if (success_msg) { %>
-                <section class="flash-message success"><%= success_msg %></section>
-            <% } %>
-        
-            <% if (error_msg) { %>
-                <section class="flash-message error"><%= error_msg %></section>
-            <% } %>  
-        </div>
-        <div class="container">
-            <h1>Login</h1>
-            <form action="/login" method="POST">
-                <label for="nom">Nom</label>
-                <input type="text" id="nom" name="nom" required>
-    
-                <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" required>
-    
-                <button type="submit">Se connecter</button>
-            </form>
-        </div>
-    <% } %>
+            </div>
+        <% } %>
+    </div>
 </body>
 </html>

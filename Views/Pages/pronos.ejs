@@ -2,266 +2,205 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Pronostics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronostics | Dashboard</title>
     <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <style>
-        h1 {
-            margin-bottom: 10px;
-        }
-    </style>
     <%- include('../Partials/navbar') %>
 
-    <div class="mid annonce">
-        <% if(annonces) { %>
+    <div class="container">
+        <% if(annonces && annonces.length > 0) { %>
             <% annonces.forEach(annonce => { %>
-                <div>
-                    <h1>Dernière annonce :</h1>
-                    <br>
-                            <h3><%= annonce.titre %></h3>
-                            <p><%= annonce.description %></p>
+                <div class="annonce">
+                    <h1>Dernière annonce</h1>
+                    <div class="annonce-content">
+                        <h3><%= annonce.titre %></h3>
+                        <p><%= annonce.description %></p>
+                        <div class="text-muted" style="font-size: 0.85rem; margin-top: 1rem;">
+                            <span>📅 <%= new Date(annonce.dateAnnonce).toLocaleDateString("fr-FR") %> à 
+                            <%= new Date(annonce.dateAnnonce).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %></span>
                             <br>
-                            <p>Le : <strong><%= new Date(annonce.dateAnnonce).toLocaleDateString("fr-FR") %> à 
-                            <%= new Date(annonce.dateAnnonce).toLocaleString("fr-FR", { 
-                                timeZone: "Europe/Paris", 
-                                hour: "2-digit", 
-                                minute: "2-digit" 
-                              }) %>
-                            </strong></p>
-                            <p>Par <strong><%= annonce.userId.prenom %> <%= annonce.userId.nom%></strong></p>
-                    </div>    
-                <% }) %>
+                            <span>👤 Par <strong><%= annonce.userId.prenom %> <%= annonce.userId.nom %></strong></span>
+                        </div>
+                    </div>
+                </div>    
+            <% }) %>
         <% } %>
-
     </div>
     
-    <!-- Affichage des statistiques -->
-    <div class="mid">
-        <ul class="stats">
-            <h3>Statistiques des Pronostics :</h3>
-            <br>
-            <p><strong>Total des pronostics :</strong> <%= totalPronostics %></p>
-            <p><strong>Pronostics gagnés :</strong> <%= pronosticsGagnes %></p>
-            <p><strong>Pronostics perdus :</strong> <%= pronosticsPerdus %></p>
-            <p><strong>Ratio des pronostics gagnés :</strong> <%= ratio %> %</p>
-        </ul>
+    <div class="container">
+        <h2 class="text-center">Tableau de Bord</h2>
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">Total Pronos</span>
+                <span class="stat-value"><%= totalPronostics %></span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Gagnés</span>
+                <span class="stat-value" style="color: var(--success);"><%= pronosticsGagnes %></span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Perdus</span>
+                <span class="stat-value" style="color: var(--danger);"><%= pronosticsPerdus %></span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Taux de réussite</span>
+                <span class="stat-value"><%= ratio %>%</span>
+            </div>
+        </div>
     </div>
-    <div class="annonce">
-        <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
-        <h2>Pronostic en attente :</h2>
-    </div>
+
+    <div class="container text-center">
+        <div id="MyClockDisplay" class="clock"></div>
+        <h2 style="margin-top: 1rem;">⏳ Pronostics en attente</h2>
     
-    <!-- Pronostics EN ATTENTE -->
-    <div class="mid">  
-        <% pronosEnAttente.forEach(prono => { %>
-            <ul class="pronosbis">
-                <li>
-                    <strong>
-                        Paris <%= prono.typePari %> 
-                        côté à 
-                        <% if(prono.typePari === "Combiné" ) {%>
-                            <strong><%= prono.cote %></strong> <!-- Cote finale du combiné ou pari simple -->
-                        <% } else {%>
-                                <% prono.matchs.forEach(match => { %>
-                                    <strong><%= match.cote %></strong> 
-                                <% }); %>
-                        <% } %>
-                        du <%= new Date(prono.createdAt).toLocaleDateString("fr-FR") %> à <%= new Date(prono.createdAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %>
-                    </strong> %>
-                </li>
+        <div class="container">  
+            <% if(pronosEnAttente.length === 0) { %>
+                <p class="text-center">Aucun pronostic en attente.</p>
+            <% } %>
 
-                <li>
-                    <tr>
-                        <td colspan="5">
-                            <% prono.matchs.forEach(match => { %>
-                                --- <strong><%= match.equipeDomicile %> vs <%= match.equipeExterieur %></strong>
-                                <br> 
-                                le <%= new Date(match.date).toLocaleDateString("fr-FR") %>
-                                <br>
-                                <strong><%= match.typePrediction %> :</strong> <%= match.prediction %> 
-                                <br>
-                                <strong>Cote :</strong> <%= match.cote %>
-                                <br>
-                                <% }); %>
-                        </td>
-                    </tr>
-                </li>
-                <li>
-
-                    <% if (user?.role === "admin") { %>
-                        <form action="/<%= prono._id %>/statut" class="form"npm start method="POST" >
-                            <select name="statut">
-                                <option value="En Attente" <%= prono.statut === "En Attente" ? "selected" : "" %>>En attente</option>
-                                <option value="Gagné" <%= prono.statut === "Gagné" ? "selected" : "" %>>Gagné</option>
-                                <option value="Perdu" <%= prono.statut === "Perdu" ? "selected" : "" %>>Perdu</option>
-                            </select>
-                            <button type="submit">Mettre à jour</button>
-                        </form>
-                    <% } %>
-                </li>
-                </ul>
-        <% }); %>
-</div>
-
-<h2 class="mid annonce">Pronostics terminés :</h2>
-<!-- Pronostics TERMINÉS -->
-<div class="mid">
-        <% pronosTermines.forEach(prono => { %>
-            <ul class="pronos">
-                <% if(prono.statut === "Gagné") {%>
-                <h1 class="statuty">
-                <% }else { %>
-                    <h1 class="statutn">
-                <% } %>
-                <%= prono.statut %></h1>
-                <li>
-                    <strong>
-                        Paris <%= prono.typePari %> 
-                        côté à 
-                        <% if(prono.typePari === "Combiné" ) {%>
-                            <strong><%= prono.cote %></strong> <!-- Cote finale du combiné ou pari simple -->
-                        <% } else {%>
-                                <% prono.matchs.forEach(match => { %>
-                                    <strong></strong> <%= match.cote %>
-                                <% }); %>
-                        <% } %>
-                        du <%= new Date(prono.createdAt).toLocaleDateString("fr-FR") %> à <%= new Date(prono.createdAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %>
-                    </strong>
-                    <br>
-                </li>
-
-                <li>
-                    <tr>
-                        <td colspan="5">
-                                <% prono.matchs.forEach(match => { %>
-                                    --- <strong><%= match.equipeDomicile %> vs <%= match.equipeExterieur %></strong>
-                                    <br> 
-                                    le <%= new Date(match.date).toLocaleDateString("fr-Fr") %>
-                                    <br>
-                                    <strong><%= match.typePrediction %> :</strong> <%= match.prediction %> 
-                                    <br>
-                                    <strong>Cote :</strong> <%= match.cote %>
-                                    <br>
-                                    <% }); %>
-                        </td>
-                    </tr>
-                </li>
-                <li>
-
-                    <% if (user?.role === "admin") { %>
-                        <form action="/<%= prono._id %>/statut" class="form" method="POST">
-                            <select name="statut">
-                                <option value="En Attente" <%= prono.statut === "En Attente" ? "selected" : "" %>>En attente</option>
-                                <option value="Gagné" <%= prono.statut === "Gagné" ? "selected" : "" %>>Gagné</option>
-                                <option value="Perdu" <%= prono.statut === "Perdu" ? "selected" : "" %>>Perdu</option>
-                            </select>
-                            <button type="submit">Mettre à jour</button>
-                        </form>
-                    <% } %>
-                </li>
-
-                <!-- Affichage des commentaires -->
-                <% if (prono.commentaires.length === 0) { %>
-                    <p>Aucun commentaire pour le moment.</p>
-                <% } else { %>
-                    <div class="commentaire">
-                        <% prono.commentaires.forEach(commentaire => { %>
-                    <div class="commentaire-item">
-                        <% if (user?.role !== "admin") { %>
-                            <p class="little">
-                                <em><%= commentaire.auteur %></em> : <strong><%= commentaire.contenu %></strong> 
-                                <em><%= new Date(commentaire.date).toLocaleDateString("fr-FR") %> à <%= new Date(commentaire.date).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %></em>
-                            </p>
-                        <% } else if (user?.role === "admin") { %>
-                            <div class="flex-container">
-                                <p class="little">
-                                    <em><%= commentaire.auteur %></em> : <strong><%= commentaire.contenu %></strong> 
-                                    <em><%= new Date(commentaire.date).toLocaleDateString("fr-FR") %> à <%= new Date(commentaire.date).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) %></em>
-                                </p>
-                                <form action="/<%= prono._id %>/commentaire/<%= commentaire._id %>?_method=DELETE" id="commentaire-form" method="POST">
-                                    <button type="submit">Supprimer</button>
-                                </form>
-                            </div>
-                        <% } %>
+            <% pronosEnAttente.forEach(prono => { %>
+                <div class="match card">
+                    <div class="match-info">
+                        <span class="badge badge-info"><%= prono.typePari %></span>
+                        <p>Cote Totale : <strong><%= prono.cote || 'N/A' %></strong></p>
                     </div>
 
+                    <div class="match-details">
+                        <% prono.matchs.forEach(match => { %>
+                            <div class="match-item">
+                                <strong><%= match.equipeDomicile %> vs <%= match.equipeExterieur %></strong>
+                                <div class="match-meta">
+                                    <span><%= match.typePrediction %> : <%= match.prediction %></span>
+                                    <span>Cote : <%= match.cote %></span>
+                                </div>
+                            </div>
                         <% }); %>
                     </div>
-                <% } %>
 
-                <!-- Formulaire pour ajouter un commentaire -->
-                <% if (user) { %>
-                    <form action="/<%= prono._id %>/commentaire" id="commentaire-form" class="form" method="POST">
-                        <input type="hidden" name="auteur" value="<%= user.prenom %>" required>
-                        <label for="contenu">Commentaire</label>
-                        <textarea maxlength="50" id="commentaire-textarea" placeholder="Maximum 50 caractères..." required name="contenu"></textarea>
-                        <button type="submit">Ajouter un commentaire</button>
-                    </form>      
-                <% } %>
-            </li>
-        </ul>
+                    <% if (user?.role === "admin") { %>
+                        <div class="admin-actions">
+                            <form action="/<%= prono._id %>/statut" method="POST" class="form-inline">
+                                <select name="statut" class="select-statut">
+                                    <option value="En Attente" <%= prono.statut === "En Attente" ? "selected" : "" %>>En attente</option>
+                                    <option value="Gagné" <%= prono.statut === "Gagné" ? "selected" : "" %>>Gagné</option>
+                                    <option value="Perdu" <%= prono.statut === "Perdu" ? "selected" : "" %>>Perdu</option>
+                                </select>
+                                <button type="submit" class="btn-sm">Mettre à jour</button>
+                            </form>
+                        </div>
+                    <% } %>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+
+    
+    <div class="container">
+        <h2 class="text-center">✅ Pronostics terminés</h2>
+        <% pronosTermines.forEach(prono => { %>
+            <div class="match card">
+                <div class="justify-between align-center mb-1">
+                    <span class="<%= prono.statut === 'Gagné' ? 'statuty' : 'statutn' %>">
+                        <%= prono.statut %>
+                    </span>
+                    <small class="text-muted"><%= new Date(prono.createdAt).toLocaleDateString("fr-FR") %></small>
+                </div>
+
+                <div class="match-grid">
+                    <div class="match-list">
+                        <% prono.matchs.forEach(match => { %>
+                            <div class="mb-1">
+                                <strong><%= match.equipeDomicile %> - <%= match.equipeExterieur %></strong><br>
+                                <small><%= match.prediction %> (Cote: <%= match.cote %>)</small>
+                            </div>
+                        <% }); %>
+                    </div>
+                    <div class="match-summary text-center">
+                        <span class="text-muted">Cote finale</span>
+                        <div class="cote-finale"><%= prono.cote %></div>
+                    </div>
+                </div>
+
+                <div class="commentaire-section">
+                    <h4>Commentaires</h4>
+                    <div class="commentaires-list">
+                        <% if (prono.commentaires.length === 0) { %>
+                            <p class="text-muted small">Aucun commentaire.</p>
+                        <% } else { %>
+                            <% prono.commentaires.forEach(commentaire => { %>
+                                <div class="commentaire-item">
+                                    <div class="commentaire-header">
+                                        <strong><%= commentaire.auteur %></strong>
+                                        <small><%= new Date(commentaire.date).toLocaleDateString() %></small>
+                                    </div>
+                                    <p><%= commentaire.contenu %></p>
+                                    <% if (user?.role === "admin") { %>
+                                        <form action="/<%= prono._id %>/commentaire/<%= commentaire._id %>?_method=DELETE" method="POST">
+                                            <button type="submit" class="text-danger small btn-link">Supprimer</button>
+                                        </form>
+                                    <% } %>
+                                </div>
+                            <% }); %>
+                        <% } %>
+                    </div>
+
+                    <% if (user) { %>
+                        <form action="/<%= prono._id %>/commentaire" method="POST" class="commentaire-form">
+                            <input type="hidden" name="auteur" value="<%= user.prenom %>">
+                            <textarea name="contenu" placeholder="Ajouter un commentaire (max 50 car.)..." maxlength="50" required></textarea>
+                            <button type="submit" class="btn-primary">Envoyer</button>
+                        </form>      
+                    <% } %>
+                </div>
+            </div>
         <% }); %>
-</div>
+    </div>
+
     <%- include('../Partials/footer') %>
+
     <script>
-        // Sauvegarde la position du scroll avant l'envoi du formulaire
-        document.addEventListener("DOMContentLoaded", function () {
+        // Gestion du scroll après soumission
+        document.addEventListener("DOMContentLoaded", () => {
             if (sessionStorage.getItem("scrollPosition")) {
                 window.scrollTo(0, sessionStorage.getItem("scrollPosition"));
                 sessionStorage.removeItem("scrollPosition");
             }
-    
             document.querySelectorAll("form").forEach(form => {
-                form.addEventListener("submit", function () {
+                form.addEventListener("submit", () => {
                     sessionStorage.setItem("scrollPosition", window.scrollY);
                 });
             });
         });
 
+        // Horloge temps réel
         function showTime(){
-    var date = new Date();
-    var h = date.getHours(); // 0 - 23
-    var m = date.getMinutes(); // 0 - 59
-    var s = date.getSeconds(); // 0 - 59
-    var session = "AM";
-    
-    if(h == 0){
-        h = 12;
-    }
-    
-    if(h > 12){
-        h = h - 12;
-        session = "PM";
-    }
-    
-    h = (h < 10) ? "0" + h : h;
-    m = (m < 10) ? "0" + m : m;
-    s = (s < 10) ? "0" + s : s;
-    
-    var time = h + ":" + m + ":" + s + " " + session;
-    document.getElementById("MyClockDisplay").innerText = time;
-    document.getElementById("MyClockDisplay").textContent = time;
-    
-    setTimeout(showTime, 1000);
-    
-}
+            const date = new Date();
+            let h = date.getHours();
+            let m = date.getMinutes();
+            let s = date.getSeconds();
+            
+            h = (h < 10) ? "0" + h : h;
+            m = (m < 10) ? "0" + m : m;
+            s = (s < 10) ? "0" + s : s;
+            
+            const time = `${h}:${m}:${s}`;
+            document.getElementById("MyClockDisplay").textContent = time;
+            setTimeout(showTime, 1000);
+        }
+        showTime();
 
-showTime();
-
-    document.addEventListener("DOMContentLoaded", () => {
-        const textarea = document.querySelector("#commentaire-textarea"); // Sélectionne le textarea
-        const form = document.querySelector("#commentaire-form"); // Sélectionne le formulaire
-
-        textarea.addEventListener("keypress", (event) => {
-            if (event.key === "Enter" && !event.shiftKey) { 
-                event.preventDefault(); // Empêche le retour à la ligne
-                form.submit(); // Soumet le formulaire
-            }
+        // Raccourci Entrée pour commentaires
+        document.querySelectorAll(".commentaire-form textarea").forEach(area => {
+            area.addEventListener("keypress", (e) => {
+                if (e.key === "Enter" && !e.shiftKey) { 
+                    e.preventDefault();
+                    e.target.closest("form").submit();
+                }
+            });
         });
-    });
-
     </script>
-    
 </body>
 </html>

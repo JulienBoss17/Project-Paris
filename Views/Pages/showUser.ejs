@@ -1,95 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../style.css">
-    <title><%= user.nom %></title>
+    <title>Profil de <%= user.nom %></title>
 </head>
 <body>
-    <style>
-        .div p, strong{
-            font-size: 1.5rem;
-            padding-top: 10px;
-            color: black;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .div {
-        margin: 20px auto;
-        padding: 20px;
-        max-width: 600px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 15px 20px rgb(255, 255, 255);
-    }
-
-    .a {
-        margin-top: 20px;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    a {
-            font-size: 1.3rem;
-            color: rgb(94, 94, 94);
-            text-decoration: none;
-            padding-top: 75px;
-        }
-
-        a:hover {
-            color: rgb(0, 0, 0);
-            transition: color 0.3s ease-in-out;
-        }
-        @media (max-width: 768px) {
-            *{
-                box-sizing: content-box;
-            }
-
-            body{
-                padding-top: 50px;
-            }
-
-            .div {
-                padding: 15px;
-                margin: 10px;
-                max-width: 90%;
-            }
-
-            .div p, strong {
-                font-size: 1.2rem;
-            }
-
-            a {
-                font-size: 1rem;
-                padding-top: 15px;
-            }
-
-            .a {
-                flex-direction: column;
-                align-items: center;
-                margin-top: 5px;
-            }
-
-            .a a {
-                margin-bottom: 10px;
-            }
-        }
-    </style>
     <%- include('../Partials/navbar') %>
-    <div class="div">
-        <% if (success_msg2) { %>
+
+    <div class="container" style="max-width: 600px;">
+        <% if (locals.success_msg2) { %>
             <div class="flash-message success"><%= success_msg2 %></div>
         <% } %>
-        <p><strong><%= user.nom %> <%= user.prenom %></strong></p>
-        <p><strong>Tu es : </strong><%= user.role %></p>
-        <p><strong>Statut : </strong><%= user.status %></p>
-        <div class="a">
-            <a href="/deleteuser/<%= user._id %>">Supprimer mon compte</a>
-            <a href="/">Retour à l'Accueil</a>
-            <a href="/compte">Retour au compte</a>
+
+        <div class="text-center" style="margin-bottom: 2rem;">
+            <div style="width: 80px; height: 80px; background: var(--primary-soft); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; font-weight: 800;">
+                <%= user.prenom.charAt(0) %>
+            </div>
+            <h1 style="margin: 0;"><%= user.nom %> <%= user.prenom %></h1>
+            <span class="statuty" style="background: var(--primary-soft); color: var(--primary);"><%= user.role %></span>
+        </div>
+
+        <div style="background: var(--bg-main); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 2rem;">
+            <div class="justify-between flex" style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                <span class="text-muted">Statut du compte</span>
+                <strong style="color: var(--success);"><%= user.status || 'Actif' %></strong>
+            </div>
+            <div class="justify-between flex">
+                <span class="text-muted">Membre depuis</span>
+                <strong><%= new Date(user.createdAt || Date.now()).toLocaleDateString("fr-FR") %></strong>
+            </div>
+        </div>
+
+        <div style="display: grid; gap: 10px;">
+            <a href="/compte" class="btn" style="background: var(--bg-main); color: var(--text-main); border: 1px solid var(--border-color);">⬅️ Retour au compte</a>
+            <a href="/deleteuser/<%= user._id %>" style="color: var(--danger); text-align: center; font-size: 0.9rem; margin-top: 1rem;">Supprimer mon compte</a>
         </div>
     </div>
 </body>
