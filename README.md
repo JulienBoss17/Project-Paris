@@ -1,17 +1,36 @@
-username: Julien
-located_in: La Rochelle
-current_job: Full Stack Web Developer
+# Projet Pari Sportif
 
-education: [
-  "BTS Web and web mobile developper 'AFEC'",
-  "Self-taught: Learned through online resources (courses, tutorials, documentation)"
-]
+Projet réalisé dans le cadre d'un projet d'école. Cette application web permet de gérer des pronostics sportifs, suivre les paris et visualiser des statistiques utilisateur.
 
-fields_of_interests: [
-  "Web Development",
-  "Project creation",
-  "learning JAVA",
-  "API Development",
-]
+## Description
 
-hobbies: [ "Soccer", "Netflix", "Spotify" ]
+- Interface web simple et intuitive
+- Gestion des pronostics sportifs
+- Suivi des pronostiques par utilisateur
+- Gestion des commentaires par l'admin
+- Développé avec Node.js, Express, EJS et MongoDB
+
+## Démonstration
+
+Le projet est accessible en ligne : [pari-sportif.jubdev.fr](https://pari-sportif.jubdev.fr)
+
+## Dépôt GitHub
+
+Le code source est disponible sur : [GitHub - Project Paris](https://github.com/JulienBoss17/Project-Paris)
+
+## Illustration du projet
+
+L'image utilisée dans ce portfolio est une illustration libre de droits provenant de **Unsplash**.
+
+![Aperçu du projet Pari Sportif](assets/pari-sportif-preview.jpg)
+
+---
+
+## Technologies utilisées
+
+- Node.js
+- Express
+- EJS
+- MongoDB
+- CSS
+
