@@ -101,7 +101,7 @@
     <div class="container">
         <h2 class="text-center">✅ Pronostics terminés</h2>
         <% pronosTermines.forEach(prono => { %>
-            <div class="match card">
+            <div class="match card" id="prono-<%= prono._id %>">
                 <div class="justify-between align-center mb-1">
                     <span class="<%= prono.statut === 'Gagné' ? 'statuty' : 'statutn' %>">
                         <%= prono.statut %>
@@ -148,9 +148,9 @@
                     </div>
 
                     <% if (user) { %>
-                        <form action="/<%= prono._id %>/commentaire" method="POST" class="commentaire-form">
+                        <form action="/<%= prono._id %>/commentaire" method="POST" class="commentaire-form" data-prono-id="<%= prono._id %>">
                             <input type="hidden" name="auteur" value="<%= user.prenom %>">
-                            <textarea name="contenu" placeholder="Ajouter un commentaire (max 50 car.)..." maxlength="50" required></textarea>
+                            <textarea name="contenu" placeholder="Ajouter un commentaire (max 50 caractères)" maxlength="50" required></textarea>
                             <button type="submit" class="btn-primary">Envoyer</button>
                         </form>      
                     <% } %>
@@ -162,18 +162,32 @@
     <%- include('../Partials/footer') %>
 
     <script>
-        // Gestion du scroll après soumission
-        document.addEventListener("DOMContentLoaded", () => {
-            if (sessionStorage.getItem("scrollPosition")) {
-                window.scrollTo(0, sessionStorage.getItem("scrollPosition"));
-                sessionStorage.removeItem("scrollPosition");
-            }
-            document.querySelectorAll("form").forEach(form => {
-                form.addEventListener("submit", () => {
-                    sessionStorage.setItem("scrollPosition", window.scrollY);
-                });
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Scroll après rechargement
+    const lastProno = sessionStorage.getItem("lastCommentedProno");
+    if (lastProno) {
+        const target = document.getElementById(`prono-${lastProno}`);
+        if (target) {
+            target.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
             });
+        }
+        sessionStorage.removeItem("lastCommentedProno");
+    }
+
+    // Avant soumission → mémorise le prono concerné
+    document.querySelectorAll(".commentaire-form").forEach(form => {
+        form.addEventListener("submit", () => {
+            sessionStorage.setItem(
+                "lastCommentedProno",
+                form.dataset.pronoId
+            );
         });
+    });
+
+});
 
         // Horloge temps réel
         function showTime(){
@@ -192,15 +206,6 @@
         }
         showTime();
 
-        // Raccourci Entrée pour commentaires
-        document.querySelectorAll(".commentaire-form textarea").forEach(area => {
-            area.addEventListener("keypress", (e) => {
-                if (e.key === "Enter" && !e.shiftKey) { 
-                    e.preventDefault();
-                    e.target.closest("form").submit();
-                }
-            });
-        });
     </script>
 </body>
 </html>
